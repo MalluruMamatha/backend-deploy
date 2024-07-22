@@ -23,23 +23,49 @@ pipeline{
 
    stages{
 
-        stage('read version'){
+        stage('print the version'){
             steps{
                 script{
                     echo "application version is: ${params.appversion}"
                 }
             }
         }
+        stage('init'){
+            steps{
+                sh """
+                    cd terraform
+                    terraform init -reconfigure
+                """
+            }
+        }
 
-        
-           
+        stage('plan'){
+            steps{
+                sh """
+                    pwd
+                    cd terraform
+                    terraform plan -var="app_version=${params.appversion}"
+                """
+            }
+        }
+
+         stage('Deploy'){
+            steps{
+                sh """
+                    cd terraform
+                    terraform apply -auto-approve -var="app_version=${params.appversion}"
+                """
+            }
+        }
     }
+
+
 
     post{
 
         always{
             echo 'always say hello' 
-            //deleteDir()  ////delete workspace when build is done
+            deleteDir()  ////delete workspace when build is done
         }
         success{
             echo 'i will run when pipeline is success'
