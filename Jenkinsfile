@@ -17,7 +17,7 @@ pipeline{
     environment{
 
         def appversion = '' // variable declaration
-        // def nexusUrl = 'nexus.malluru.online:8081'
+        def nexusUrl = 'nexus.malluru.online:8081'
      
     }
 
@@ -61,11 +61,14 @@ pipeline{
 
 
 
+
+
+
     post{
 
         always{
             echo 'always say hello' 
-            deleteDir()  ////delete workspace when build is done
+           deleteDir()   ////delete workspace when build is done
         }
         success{
             echo 'i will run when pipeline is success'
